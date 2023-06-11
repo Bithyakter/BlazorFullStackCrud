@@ -6,7 +6,7 @@ namespace BlazorFullStackCrud.Client.Services.SuperHeroService
    {
       private readonly HttpClient _http;
 
-      public SuperHeroService( HttpClient http)
+      public SuperHeroService(HttpClient http)
       {
          _http = http;
       }
@@ -28,16 +28,42 @@ namespace BlazorFullStackCrud.Client.Services.SuperHeroService
 
          if (result != null)
             return result;
-         throw new Exception("Hero not found");
 
+         throw new Exception("Hero not found");
       }
 
       public async Task GetSuperHeroes()
       {
          var result = await _http.GetFromJsonAsync<List<SuperHero>>("api/superhero");
 
-         if(result != null)
+         if (result != null)
             Heroes = result;
+      }
+
+      public async Task CreateHero(SuperHero hero)
+      {
+         var result = await _http.PostAsJsonAsync("api/superhero", hero);
+         await SetHeroes(result);
+      }
+
+      private async Task SetHeroes(HttpResponseMessage result)
+      {
+         var response = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+         await SetHeroes(result);
+      }
+
+      public async Task UpdateHero(SuperHero hero)
+      {
+         var result = await _http.PostAsJsonAsync($"api/superhero/{hero.Id}", hero);
+         var response = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+         await SetHeroes(result);
+      }
+
+      public async Task DeleteHero(int id)
+      {
+         var result = await _http.DeleteAsync($"api/superhero/{id}");
+         var response = await result.Content.ReadFromJsonAsync<List<SuperHero>>();
+         await SetHeroes(result);
       }
    }
 }
