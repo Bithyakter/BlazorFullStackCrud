@@ -15,26 +15,25 @@ namespace BlazorFullStackCrud.Server.Controllers
       }
 
       [HttpGet]
-      public async Task<ActionResult<List<SuperHero>>> GetSuperHeros()
+      public async Task<ActionResult<List<SuperHero>>> GetSuperHeroes()
       {
-         var heroes = await _context.superHeroes.ToArrayAsync();
+         var heroes = await _context.SuperHeroes.Include(sh => sh.Comic).ToListAsync();
          return Ok(heroes);
       }
 
       [HttpGet("comics")]
       public async Task<ActionResult<List<Comic>>> GetComics()
       {
-         var comics = await _context.comics.ToArrayAsync();
+         var comics = await _context.Comics.ToListAsync();
          return Ok(comics);
       }
 
       [HttpGet("{id}")]
       public async Task<ActionResult<SuperHero>> GetSingleHero(int id)
       {
-         var hero = await _context.superHeroes
-            .Include(h => h.Comic)
-            .FirstOrDefaultAsync(h => h.Id == id);
-
+         var hero = await _context.SuperHeroes
+             .Include(h => h.Comic)
+             .FirstOrDefaultAsync(h => h.Id == id);
          if (hero == null)
          {
             return NotFound("Sorry, no hero here. :/");
@@ -46,20 +45,18 @@ namespace BlazorFullStackCrud.Server.Controllers
       public async Task<ActionResult<List<SuperHero>>> CreateSuperHero(SuperHero hero)
       {
          hero.Comic = null;
-
-         _context.superHeroes.Add(hero);
+         _context.SuperHeroes.Add(hero);
          await _context.SaveChangesAsync();
 
          return Ok(await GetDbHeroes());
       }
 
-      [HttpPost]
+      [HttpPut("{id}")]
       public async Task<ActionResult<List<SuperHero>>> UpdateSuperHero(SuperHero hero, int id)
       {
-         var dbHero = await _context.superHeroes
-            .Include(h => h.Comic)
-            .FirstOrDefaultAsync(h => h.Id == id);
-
+         var dbHero = await _context.SuperHeroes
+             .Include(sh => sh.Comic)
+             .FirstOrDefaultAsync(sh => sh.Id == id);
          if (dbHero == null)
             return NotFound("Sorry, but no hero for you. :/");
 
@@ -73,17 +70,16 @@ namespace BlazorFullStackCrud.Server.Controllers
          return Ok(await GetDbHeroes());
       }
 
-      [HttpPost]
+      [HttpDelete("{id}")]
       public async Task<ActionResult<List<SuperHero>>> DeleteSuperHero(int id)
       {
-         var dbHero = await _context.superHeroes
-            .Include(h => h.Comic)
-            .FirstOrDefaultAsync(h => h.Id == id);
-
+         var dbHero = await _context.SuperHeroes
+             .Include(sh => sh.Comic)
+             .FirstOrDefaultAsync(sh => sh.Id == id);
          if (dbHero == null)
             return NotFound("Sorry, but no hero for you. :/");
 
-         _context.superHeroes.Remove(dbHero);
+         _context.SuperHeroes.Remove(dbHero);
          await _context.SaveChangesAsync();
 
          return Ok(await GetDbHeroes());
@@ -91,7 +87,7 @@ namespace BlazorFullStackCrud.Server.Controllers
 
       private async Task<List<SuperHero>> GetDbHeroes()
       {
-         return await _context.superHeroes.Include(h => h.Comic).ToListAsync();
+         return await _context.SuperHeroes.Include(sh => sh.Comic).ToListAsync();
       }
    }
 }
