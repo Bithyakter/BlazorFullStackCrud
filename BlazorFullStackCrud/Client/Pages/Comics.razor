@@ -1,0 +1,48 @@
+﻿@page "/comics"
+@inject IComicService ComicService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Comicd</PageTitle>
+
+<h3>Comics</h3>
+
+<table class="table">
+   <thead>
+      <tr>
+         <th>Name</th>
+         <th></th>
+      </tr>
+   </thead>
+
+   <tbody>
+      @foreach (var comic in ComicService.Comics)
+      {
+         <tr>
+            <td>@comic.Name</td>
+            <td>
+               <button class="btn btn-primary" @onclick="(() => ShowComic(comic.Id))"><i class="oi oi-pencil"></i></button>
+            </td>
+         </tr>
+      }
+   </tbody>
+</table>
+
+<button class="btn btn-primary" @onclick="CreateNewComic" >Create New Comic</button>
+
+@code {
+
+   protected override async Task OnInitializedAsync()
+   {
+      await ComicService.GetComics();
+   }
+
+   void ShowComic(int id)
+   {
+      NavigationManager.NavigateTo($"createcomic/{id}");
+   }
+
+   void CreateNewComic()
+   {
+      NavigationManager.NavigateTo("/createcomic");
+   }
+}
