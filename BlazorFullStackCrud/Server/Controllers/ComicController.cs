@@ -22,12 +22,14 @@ namespace BlazorFullStackCrud.Server.Controllers
          return Ok(comics);
       }
 
-      public async Task<ActionResult<Comic>> GetComic(int id)
+      [HttpGet("{id}")]
+      public async Task<ActionResult<Comic>> GetSingleComic(int id)
       {
-         var comic = await _context.Comics.FirstOrDefaultAsync(c => c.Id == id);
+         var comic = await _context.Comics.FirstOrDefaultAsync(h => h.Id == id);
 
-         if(comic == null) { 
-            return NotFound("Sorry, no comic here. :/");
+         if (comic == null)
+         {
+            return NotFound("Sorry, no Comic here. :/");
          }
 
          return Ok(comic);
@@ -47,6 +49,7 @@ namespace BlazorFullStackCrud.Server.Controllers
       {
          var comics = await _context.Comics
              .FirstOrDefaultAsync(sh => sh.Id == id);
+
          if (comics == null)
             return NotFound("Sorry, but no comic for you. :/");
 
@@ -62,6 +65,7 @@ namespace BlazorFullStackCrud.Server.Controllers
       {
          var comics = await _context.Comics
              .FirstOrDefaultAsync(sh => sh.Id == id);
+
          if (comics == null)
             return NotFound("Sorry, but no comic for you. :/");
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,9 @@ namespace BlazorFullStackCrud.Shared
     public class Comic
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+
+      [Required(ErrorMessage = "The Name field is required.")]
+
+      public string Name { get; set; } = string.Empty;
     }
 }

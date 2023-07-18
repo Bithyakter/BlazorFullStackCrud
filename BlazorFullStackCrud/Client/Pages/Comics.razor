@@ -2,7 +2,7 @@
 @inject IComicService ComicService
 @inject NavigationManager NavigationManager
 
-<PageTitle>Comicd</PageTitle>
+<PageTitle>Comic</PageTitle>
 
 <h3>Comics</h3>
 
@@ -21,6 +21,7 @@
             <td>@comic.Name</td>
             <td>
                <button class="btn btn-primary" @onclick="(() => ShowComic(comic.Id))"><i class="oi oi-pencil"></i></button>
+               <button type="button" class="btn btn-danger mx-2" @onclick="(() => DeleteComic(comic.Id))"><i class="oi oi-delete"></i></button>
             </td>
          </tr>
       }
@@ -44,5 +45,11 @@
    void CreateNewComic()
    {
       NavigationManager.NavigateTo("/createcomic");
+   }
+
+   async Task DeleteComic(int comicId)
+   {
+      await ComicService.DeleteComic(comicId);
+      await ComicService.GetComics(); // Refresh the comics after deletion
    }
 }

@@ -42,10 +42,8 @@ namespace BlazorFullStackCrud.Client.Services.ComicService
       public async Task<Comic> GetSingleComic(int id)
       {
          var result = await _http.GetFromJsonAsync<Comic>($"api/comic/{id}");
-
-         if(result != null)
+         if (result != null)
             return result;
-
          throw new Exception("Comic not found!");
       }
 
@@ -53,7 +51,6 @@ namespace BlazorFullStackCrud.Client.Services.ComicService
       public async Task GetComics()
       {
          var result = await _http.GetFromJsonAsync<List<Comic>>("api/comic");
-
          if (result != null)
             Comics = result;
       }

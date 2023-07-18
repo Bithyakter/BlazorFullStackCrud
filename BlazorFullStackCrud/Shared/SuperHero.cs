@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,10 @@ namespace BlazorFullStackCrud.Shared
     public class SuperHero
     {
         public int Id { get; set; }
-        public string FirstName { get; set; } = string.Empty;
+
+      [Required(ErrorMessage = "The Name field is required.")]
+
+      public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string HeroName { get; set; } = string.Empty;
         public Comic? Comic { get; set; }

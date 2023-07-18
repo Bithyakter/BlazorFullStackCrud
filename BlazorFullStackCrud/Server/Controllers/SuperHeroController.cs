@@ -34,10 +34,12 @@ namespace BlazorFullStackCrud.Server.Controllers
          var hero = await _context.SuperHeroes
              .Include(h => h.Comic)
              .FirstOrDefaultAsync(h => h.Id == id);
+
          if (hero == null)
          {
             return NotFound("Sorry, no hero here. :/");
          }
+
          return Ok(hero);
       }
 
